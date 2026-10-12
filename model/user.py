@@ -1,8 +1,8 @@
-import enums.user_role as UserRole
+from enums.user_role import UserRole
 
 class User:
-    def __init__(self,id, email, password, token, role: UserRole):
-        self.id = id
+    def __init__(self,user_id, email, password, token, role: UserRole):
+        self.user_id = user_id
         self.email = email
         self.password = password
         self.token = token
