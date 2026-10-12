@@ -5,3 +5,4 @@ sqlalchemy
 supabase
 python-dotenv
 bcrypt
+email-validator
