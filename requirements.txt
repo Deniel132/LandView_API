@@ -6,3 +6,5 @@ supabase
 python-dotenv
 bcrypt
 email-validator
+psycopg2
+cryptography
