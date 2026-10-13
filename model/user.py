@@ -25,7 +25,7 @@ class User(Base):
 
     @staticmethod
     def from_request_dto(user_request_dto):
-        return User(user_request_dto.email, user_request_dto.password, user_request_dto.role)
+        return User(user_request_dto.email, user_request_dto.password, user_request_dto.role.name)
 
     @staticmethod
     def from_dict(data: dict) -> User:
@@ -35,6 +35,15 @@ class User(Base):
         user.active = data["active"]
 
         return user
+
+    def to_dict(self) -> dict:
+        return {
+            "email": self.email,
+            "password": self.password,
+            "token": self.token,
+            "role": self.role,
+            "active": self.active
+        }
 
     def get_id(self):
         return self.id

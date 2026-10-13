@@ -20,21 +20,21 @@ class UserRepository:
 
     @staticmethod
     def delete_by_id(user_id : int):
-        response = (supabase.table("user").where("id", user_id).delete())
+        response = (supabase.table("user").delete().eq("id", user_id).execute())
         if not response.data:
            return None
         return User.from_dict(response.data[0])
 
     @staticmethod
     def save_user(user : User):
-        response = (supabase.table("user").insert(user).execute())
+        response = (supabase.table("user").insert(user.to_dict()).execute())
         if not response.data:
            return None
         return User.from_dict(response.data[0])
 
     @staticmethod
     def update_user(user : User):
-        response = (supabase.table("user").update(user).execute())
+        response = (supabase.table("user").update(user.to_dict()).execute())
         if not response.data:
            return None
         return User.from_dict(response.data[0])
