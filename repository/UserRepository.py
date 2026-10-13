@@ -5,26 +5,46 @@ from model.user import User
 class UserRepository:
 
     @staticmethod
-    def find_by_id(self,user_id : int):
+    def find_by_id(user_id : int):
         response = (supabase.table("user").select("*").eq("id", user_id).execute())
-        return response
+        if not response.data:
+           return None
+        return User.from_dict(response.data[0])
 
     @staticmethod
-    def find_by_token(self,token : str):
+    def find_by_token(token : str):
         response = (supabase.table("user").select("*").eq("token", token).execute())
-        return response
+        if not response.data:
+           return None
+        return User.from_dict(response.data[0])
 
     @staticmethod
-    def delete_by_id(self,user_id : int):
+    def delete_by_id(user_id : int):
         response = (supabase.table("user").where("id", user_id).delete())
-        return response
+        if not response.data:
+           return None
+        return User.from_dict(response.data[0])
 
     @staticmethod
-    def save_user(self,user : User):
+    def save_user(user : User):
         response = (supabase.table("user").insert(user).execute())
-        return response
+        if not response.data:
+           return None
+        return User.from_dict(response.data[0])
 
     @staticmethod
-    def update_user(self,user : User):
+    def update_user(user : User):
         response = (supabase.table("user").update(user).execute())
-        return response
+        if not response.data:
+           return None
+        return User.from_dict(response.data[0])
+
+    @staticmethod
+    def exist_email(email: str):
+        response = (supabase.table("user").select("*").eq("email", email).execute())
+        return len(response.data) > 0
+
+    @staticmethod
+    def exist_email_for_dif_user(email: str, user_id : int):
+        response = (supabase.table("user").select("*").eq("email", email).neq("id", user_id).execute())
+        return len(response.data) > 0
