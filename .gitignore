@@ -1,8 +1,14 @@
+# Variáveis de ambiente e segredos
 .env
-.venv/
-__pycache__/
+.env.*
 
-.idea
+.venv/
+venv/
+
+__pycache__/
+*.py[cod]
+
+.idea/
 *.iws
 *.iml
 *.ipr
