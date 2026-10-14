@@ -1,6 +1,4 @@
 from enum import Enum
-from typing import Any
-
 
 class UserRole(Enum):
     SELLER = "seller"
