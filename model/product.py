@@ -10,29 +10,32 @@ class Product(Base):
     __tablename__ = "product"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __product_name = Column("product_name", String)
-    __unit_value = Column("unit_value", Float)
-    __product_category_id = Column("product_category_id", Integer,ForeignKey("product_category.id"), nullable=False)
-    __category = relationship("ProductCategory", back_populates="products")
-    __stock_item_id = Column("stock_item_id", Integer, ForeignKey("stock_item.id"), nullable=False)
-    __stock_item = relationship("Stock_item", back_populates="products")
+    __product_name = Column("product_name", String, nullable=False)
+    __unit_value = Column("unit_value", Float, nullable=False)
+    __product_category_id = Column("product_category_id",Integer,ForeignKey("product_category.id"),nullable=False)
+    __category = relationship("ProductCategory",back_populates="_ProductCategory__products")
+    __stock_item_id = Column("stock_item_id",Integer,ForeignKey("stock_item.id"),nullable=False)
+    __stock_item = relationship("Stock_item",back_populates="_Stock_item__products")
     __active = Column("active", Boolean, nullable=False, default=True)
 
-    def __init__(self, product_name, value, category, stock_item, **kw: Any):
+    def __init__(self,product_name: str,value: float,category,stock_item,**kw: Any):
         super().__init__(**kw)
-        self._product_name = product_name
+        self.__product_name = product_name
         self.__unit_value = value
-        self.__stock_item = stock_item
         self.__category = category
-        self.__product_category_id = category.get_id()
-        self.__stock_item_id = stock_item.get_id()
-        self.active = True
+        self.__stock_item = stock_item
+        self.__active = True
 
     @staticmethod
     def from_dict(data: dict) -> "Product":
-        product = Product(data["product_name"], data["unit_value"], data["product_category"], data["Stock_item"])
-        product.__id = data["id"]
-        product.__active = data["active"]
+        product = Product(
+            data["product_name"],
+            data["unit_value"],
+            data["product_category"],
+            data["stock_item"]
+        )
+        product.__id = data.get("id")
+        product.__active = data.get("active", True)
 
         return product
 
@@ -49,10 +52,10 @@ class Product(Base):
         return self.__id
 
     def get_product_name(self) -> str:
-        return self._product_name
+        return self.__product_name
 
     def set_product_name(self, product_name: str):
-        self._product_name = product_name
+        self.__product_name = product_name
 
     def get_unit_value(self) -> float:
         return self.__unit_value
@@ -65,14 +68,12 @@ class Product(Base):
 
     def set_product_category_id(self, category):
         self.__category = category
-        self.__product_category_id = category.get_id()
 
     def get_stock_item(self):
         return self.__stock_item
 
     def set_stock_item(self, stock_item):
         self.__stock_item = stock_item
-        self.__stock_item_id = stock_item.get_id()
 
     def get_active(self) -> bool:
         return self.__active

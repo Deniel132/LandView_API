@@ -10,7 +10,7 @@ class ProductCategory(Base):
     __tablename__ = "product_category"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __category_name = Column("product_name", String)
+    __category_name = Column("category_name", String)
     __category_type = Column("category_type", String)
     __products = relationship("Product",back_populates="_Product__category")
 
