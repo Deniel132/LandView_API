@@ -1,8 +1,11 @@
 import secrets
 import os
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+
 
 class TokenUtils:
+    load_dotenv()
 
     @staticmethod
     def generate_token(email: str):

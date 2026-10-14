@@ -6,17 +6,21 @@ from supabase import create_client
 
 load_dotenv()
 
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
-db = os.getenv("DB_URL")
+__url = os.getenv("SUPABASE_URL")
+__key = os.getenv("SUPABASE_KEY")
+__USER = os.getenv("user")
+__PASSWORD = os.getenv("password")
+__HOST = os.getenv("host")
+__PORT = os.getenv("port")
+__DBNAME = os.getenv("dbname")
 
-if not url or not key:
+__DATABASE_URL = f"postgresql+psycopg2://{__USER}:{__PASSWORD}@{__HOST}:{__PORT}/{__DBNAME}?sslmode=require"
+
+
+if not __url or not __key:
     raise RuntimeError("Configure SUPABASE_URL e SUPABASE_KEY no .env")
 
-if not db:
-    raise RuntimeError("Configure DB_URL no .env")
+supabase = create_client(__url, __key)
 
-supabase = create_client(url, key)
-
-Engine = create_engine(db, pool_pre_ping=True)
+Engine = create_engine(__DATABASE_URL, pool_pre_ping=True)
 Base = declarative_base()
