@@ -1,6 +1,6 @@
 from typing import Any
 
-from sqlalchemy import Column, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 from config.data_base.database import Base
@@ -10,55 +10,44 @@ class StockProduct(Base):
     __tablename__ = "stock_product"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False)
-    __id_product_category = Column("id_product_category",Integer,ForeignKey("product_category.id"),nullable=False)
+    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False,unique=True)
     __quantity = Column("quantity", Integer, nullable=False, default=0)
-    __product = relationship("Product")
-    __product_category = relationship("ProductCategory")
-    __active = Column("active", Boolean, nullable=False, default=True)
+    __product = relationship("Product", back_populates="_Product__stock_item")
 
-    def __init__(self,product,product_category,quantity: int,**kw: Any):
+    def __init__(self,product,quantity: int,**kw: Any):
         super().__init__(**kw)
         self.__product = product
-        self.__product_category = product_category
         self.__quantity = quantity
-        self.__active = True
 
     @staticmethod
     def from_dict(data: dict) -> "StockProduct":
-        stock_product = StockProduct(
-            data["product"],
-            data["product_category"],
-            data["quantity"]
-        )
-        stock_product.__id = data.get("id")
-        stock_product.__active = data.get("active", True)
-
+        stock_product = StockProduct.__new__(StockProduct)
+        stock_product._StockProduct__id = data.get("id")
+        stock_product._StockProduct__id_product = data.get("id_product")
+        stock_product._StockProduct__quantity = data.get("quantity", 0)
         return stock_product
 
     def to_dict(self) -> dict:
         return {
-            "id": self.__id,
-            "id_product": self.__id_product,
-            "id_product_category": self.__id_product_category,
-            "quantity": self.__quantity,
-            "active": self.__active
+            "id_product": self.get_id_product(),
+            "quantity": self.get_quantity()
         }
 
     def get_id(self):
         return self.__id
 
+    def get_product_id(self):
+        return self.__id_product
+
+    def set_product_id(self, product):
+        self.__product = product
+
     def get_product(self):
         return self.__product
 
     def set_product(self, product):
-        self.__product = product
+        self.__id_product = product.id
 
-    def get_product_category(self):
-        return self.__product_category
-
-    def set_product_category(self, product_category):
-        self.__product_category = product_category
 
     def get_quantity(self) -> int:
         return self.__quantity
@@ -68,9 +57,3 @@ class StockProduct(Base):
             raise ValueError("A quantidade não pode ser negativa.")
 
         self.__quantity = quantity
-
-    def get_active(self) -> bool:
-        return self.__active
-
-    def set_active(self, active: bool):
-        self.__active = active

@@ -14,16 +14,14 @@ class Product(Base):
     __unit_value = Column("unit_value", Float, nullable=False)
     __product_category_id = Column("product_category_id",Integer,ForeignKey("product_category.id"),nullable=False)
     __category = relationship("ProductCategory",back_populates="_ProductCategory__products")
-    __stock_item_id = Column("stock_item_id",Integer,ForeignKey("stock_item.id"),nullable=False)
-    __stock_item = relationship("Stock_item",back_populates="_Stock_item__products")
+    __stock_item = relationship("StockProduct",back_populates="_StockProduct__product",uselist=False)
     __active = Column("active", Boolean, nullable=False, default=True)
 
-    def __init__(self,product_name: str,value: float,category,stock_item,**kw: Any):
+    def __init__(self,product_name: str,value: float,category,**kw: Any):
         super().__init__(**kw)
         self.__product_name = product_name
         self.__unit_value = value
         self.__category = category
-        self.__stock_item = stock_item
         self.__active = True
 
     @staticmethod
@@ -31,8 +29,7 @@ class Product(Base):
         product = Product(
             data["product_name"],
             data["unit_value"],
-            data["product_category"],
-            data["stock_item"]
+            data["product_category"]
         )
         product.__id = data.get("id")
         product.__active = data.get("active", True)

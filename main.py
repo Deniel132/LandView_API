@@ -1,6 +1,10 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import *
-from pydantic import BaseModel
+from model.product import Product
+from model.product_category import ProductCategory
+from model.stock_product import StockProduct
+from controller.stock.stock_controller import stock_router
+
 app = FastAPI()
 
 from config.data_base.database import Base, Engine
@@ -14,3 +18,7 @@ app.add_middleware(
 )
 Base.metadata.create_all(bind=Engine)
 app.include_router(user_router)
+app.include_router(stock_router)
+
+
+#python -m uvicorn main:app --reload

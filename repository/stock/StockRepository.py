@@ -41,7 +41,7 @@ class StockRepository:
 
     @staticmethod
     def update_stock_product(stock_product_id: int, stock_product: StockProduct):
-        response = (supabase.table("stock_product").update(stock_product).eq("id",stock_product_id).execute())
+        response = (supabase.table("stock_product").update(stock_product.to_dict()).eq("id",stock_product_id).execute())
 
         if not response.data:
             return None
