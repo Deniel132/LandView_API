@@ -41,11 +41,10 @@ class Product(Base):
             "product_name": self.__product_name,
             "unit_value": self.__unit_value,
             "product_category_id": self.__product_category_id,
-            "stock_item_id": self.__stock_item_id,
             "active": self.__active
         }
 
-    def get_id(self) -> Column[int]:
+    def get_id(self):
         return self.__id
 
     def get_product_name(self) -> str:

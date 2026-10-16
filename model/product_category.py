@@ -10,16 +10,32 @@ class ProductCategory(Base):
     __tablename__ = "product_category"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __category_name = Column("category_name", String)
-    __category_type = Column("category_type", String)
+    __category_name = Column("category_name", String, nullable=False)
+    __category_type = Column("category_type", String, nullable=False)
     __products = relationship("Product",back_populates="_Product__category")
 
 
     def __init__(self, category_name, category_type, **kw: Any):
         super().__init__(**kw)
-        self.category_name = category_name
-        self.category_type = category_type
+        self.__category_name = category_name
+        self.__category_type = category_type
 
+    @staticmethod
+    def from_dict(data: dict) -> "ProductCategory":
+        category = ProductCategory(
+            data["category_name"],
+            data["category_type"],
+        )
+        category.__id = data.get("id")
+        category.__active = data.get("type")
+
+        return category
+
+    def to_dict(self) -> dict:
+        return {
+            "category_name": self.__category_name,
+            "category_type": self.__category_type,
+            }
 
     def get_id(self) -> Column[int]:
         return self.__id

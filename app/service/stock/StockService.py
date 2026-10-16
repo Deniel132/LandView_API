@@ -9,9 +9,11 @@ class StockService:
     def __init__(self):
         self.repository = StockRepository()
 
+    def __get_by_id(self, stock_product_id: int) -> StockProduct:
+        return self.repository.find_by_id(stock_product_id)
 
-    def find_by_id(self, stock_id: int):
-        stock = self.repository.find_by_id(stock_id)
+    def find_by_id(self, stock_id: int) -> StockResponseDTO:
+        stock = self.__get_by_id(stock_id)
         return StockResponseDTO.from_stock(stock)
 
     def create(self, request: StockRequestDTO):
