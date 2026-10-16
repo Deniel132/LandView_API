@@ -24,13 +24,17 @@ class Product(Base):
         self.__category = category
         self.__active = True
 
+        if category is not None:
+            self.__product_category_id = category.get_id()
+
     @staticmethod
     def from_dict(data: dict) -> "Product":
         product = Product(
             data["product_name"],
             data["unit_value"],
-            data["product_category"]
+            category=None
         )
+        product.__product_category_id = data["product_category_id"]
         product.__id = data.get("id")
         product.__active = data.get("active", True)
 

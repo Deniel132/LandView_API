@@ -21,30 +21,35 @@ class ProductCategory(Base):
         self.__category_type = category_type
 
     @staticmethod
+    def from_request_dto(category_request_dto):
+        return ProductCategory(
+            category_request_dto.category_name,
+            category_request_dto.category_type
+        )
+    @staticmethod
     def from_dict(data: dict) -> "ProductCategory":
         category = ProductCategory(
-            data["category_name"],
-            data["category_type"],
+            category_name=data["category_name"],
+            category_type=data["category_type"]
         )
         category.__id = data.get("id")
-        category.__active = data.get("type")
 
         return category
 
     def to_dict(self) -> dict:
         return {
             "category_name": self.__category_name,
-            "category_type": self.__category_type,
+            "category_type": self.__category_type
             }
 
-    def get_id(self) -> Column[int]:
+    def get_id(self):
         return self.__id
 
-    def get_product_name(self) -> str:
+    def get_category_name(self) -> str:
         return self.__category_name
 
-    def set_product_name(self, product_name: str):
-        self.__category_name = product_name
+    def set_category_name(self, category_name: str):
+        self.__category_name = category_name
 
     def get_category_type(self) -> str:
         return self.__category_type

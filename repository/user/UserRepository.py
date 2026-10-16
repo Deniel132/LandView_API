@@ -33,8 +33,8 @@ class UserRepository:
         return User.from_dict(response.data[0])
 
     @staticmethod
-    def update_user(user : User):
-        response = (supabase.table("user").update(user.to_dict()).execute())
+    def update_user(user_id:int,user : User):
+        response = (supabase.table("user").update(user.to_dict()).eq("id",user_id).execute())
         if not response.data:
            return None
         return User.from_dict(response.data[0])

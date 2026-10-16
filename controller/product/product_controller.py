@@ -27,7 +27,7 @@ class ProductController:
 
     @staticmethod
     @product_router.put("/{product_id}")
-    def update_stock(product_id: int, product_request: ProductRequestDTO):
+    def update_product(product_id: int, product_request: ProductRequestDTO):
         """
     Rota para alterar um Produto
         """
@@ -35,7 +35,7 @@ class ProductController:
 
     @staticmethod
     @product_router.delete("/{product_id}")
-    def delete_stock(product_id: int):
+    def delete_product(product_id: int):
         """
     Rota para deletar o Produto pelo ID
         """

@@ -27,7 +27,7 @@ class CategoryController:
 
     @staticmethod
     @category_router.put("/{category_id}")
-    def update_stock(category_id: int, category_request: CategoryRequestDTO):
+    def update_category(category_id: int, category_request: CategoryRequestDTO):
         """
     Rota para alterar uma Categoria
         """
@@ -35,7 +35,7 @@ class CategoryController:
 
     @staticmethod
     @category_router.delete("/{category_id}")
-    def delete_stock(category_id: int):
+    def delete_category(category_id: int):
         """
     Rota para deletar a Categoria pelo ID
         """

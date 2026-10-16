@@ -26,8 +26,8 @@ class ProductRepository:
         return Product.from_dict(response.data[0])
 
     @staticmethod
-    def update_product(product : Product):
-        response = (supabase.table("product").update(product.to_dict()).execute())
+    def update_product(product_id:int,product : Product):
+        response = (supabase.table("product").update(product.to_dict()).eq("id",product_id).execute())
         if not response.data:
            return None
         return Product.from_dict(response.data[0])

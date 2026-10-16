@@ -11,4 +11,4 @@ class CategoryResponseDTO:
 
     @staticmethod
     def from_category(category:ProductCategory):
-        return CategoryResponseDTO(category.category_id, category.category_name, category.category_type)
+        return CategoryResponseDTO(category.get_id(), category.get_category_name(), category.get_category_type())

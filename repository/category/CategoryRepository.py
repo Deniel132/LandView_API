@@ -28,8 +28,8 @@ class CategoryRepository:
         return ProductCategory.from_dict(response.data[0])
 
     @staticmethod
-    def update_category(product_category : ProductCategory):
-        response = (supabase.table("product_category").update(product_category.to_dict()).execute())
+    def update_category(category_id:int,product_category : ProductCategory):
+        response = (supabase.table("product_category").update(product_category.to_dict()).eq("id",category_id).execute())
         if not response.data:
            return None
         return ProductCategory.from_dict(response.data[0])
