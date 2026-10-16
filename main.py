@@ -3,6 +3,7 @@ from fastapi import *
 from model.product import Product
 from model.product_category import ProductCategory
 from model.stock_product import StockProduct
+from infrastructure.erro.global_heandler import GlobalHandler
 from controller.stock.stock_controller import stock_router
 
 app = FastAPI()
@@ -19,6 +20,7 @@ app.add_middleware(
 Base.metadata.create_all(bind=Engine)
 app.include_router(user_router)
 app.include_router(stock_router)
+GlobalHandler(app)
 
 
 #python -m uvicorn main:app --reload

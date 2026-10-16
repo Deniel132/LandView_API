@@ -1,6 +1,4 @@
 from enum import Enum
-from typing import Any
-
 
 class UserRole(Enum):
     SELLER = "seller"
@@ -9,7 +7,7 @@ class UserRole(Enum):
 
 
     @classmethod
-    def _missing_(cls,value):
+    def missing(cls,value):
         if isinstance(value,str):
             return Role_Lookup.get(value.lower())
         return None

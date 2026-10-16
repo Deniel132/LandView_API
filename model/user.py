@@ -5,6 +5,8 @@ from sqlalchemy import Column, Integer, String, Boolean
 from app.utils.password_utils import PasswordUtils
 from app.utils.token_utils import TokenUtils
 from config.data_base.database import Base
+from model.enums.user_role import UserRole
+
 
 class User(Base):
     __tablename__ = "user"
@@ -21,7 +23,7 @@ class User(Base):
         self.__email = email
         self.__password = PasswordUtils.encode_password(password)
         self.__token = TokenUtils.generate_token(email)
-        self.__role = role
+        self.__role: UserRole = UserRole.missing(role)
         self.__active = True
 
     @staticmethod

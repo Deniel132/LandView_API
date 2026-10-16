@@ -8,6 +8,10 @@ stock_router = APIRouter(prefix="/stock", tags=["Stock"])
 class StockController:
     stock_service = StockService()
 
+    def __init__(self):
+        pass
+
+
     @staticmethod
     @stock_router.get("/{stock_id}")
     def get_stock(stock_id: int):
