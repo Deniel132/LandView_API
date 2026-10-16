@@ -10,6 +10,10 @@ stock_router = APIRouter(dependencies=[Depends(get_current_user)] ,prefix="/stoc
 class StockController:
     stock_service = StockService()
 
+    def __init__(self):
+        pass
+
+
     @staticmethod
     @stock_router.get("/{stock_id}")
     def get_stock(stock_id: int):

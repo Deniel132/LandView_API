@@ -1,4 +1,5 @@
-from fastapi import HTTPException
+from infrastructure.erro.exceptions.bad_request_exception import BadRequestException
+from infrastructure.erro.exceptions.not_found_exception import NotFoundException
 
 from app.utils.password_utils import PasswordUtils
 from app.utils.token_utils import TokenUtils
@@ -16,7 +17,7 @@ class UserService:
     def find_by_id(self, user_id: int) -> UserResponseDTO:
         user = self.__get_by_id(user_id)
         if not user:
-            raise HTTPException(status_code=404,detail="Usuário não encontrado")
+            raise NotFoundException
         return UserResponseDTO.from_user(user)
 
     def exist_by_email(self, email: str, user_id: int| None) -> bool:
@@ -27,10 +28,10 @@ class UserService:
 
     def create_user(self, user_dto: UserRequestDTO) -> UserResponseDTO:
         if user_dto.password is None or not user_dto.email:
-            raise HTTPException(400, "Email ou senha não informado")
+            raise BadRequestException("Email ou senha não informado")
 
         if self.exist_by_email(user_dto.email, None):
-            raise ValueError(400, "Email informado ja existente")
+            raise BadRequestException("Email informado ja existente")
 
         if user_dto.role is None:
             user_dto.role = UserRole.USER
@@ -44,11 +45,12 @@ class UserService:
 
     def update_user(self, user_id: int, user_dto: UserRequestDTO) -> UserResponseDTO:
         if user_dto.password is None or not user_dto.email:
-            raise HTTPException(400,"Email ou senha não informado")
+            raise BadRequestException("Email ou senha não informado")
 
         user = self.__get_by_id(user_id)
         if not user:
-            raise HTTPException(status_code=404, detail="Usuário não encontrado")
+            raise BadRequestException("Usuário não encontrado")
+
         user.set_email(user_dto.email)
         user.set_role(user_dto.role.name)
         user.set_password(user_dto.password)
