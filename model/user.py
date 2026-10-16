@@ -2,26 +2,29 @@ from typing import Any
 
 from sqlalchemy import Column, Integer, String, Boolean
 
+from app.utils.password_utils import PasswordUtils
 from app.utils.token_utils import TokenUtils
 from config.data_base.database import Base
+from model.enums.user_role import UserRole
+
 
 class User(Base):
     __tablename__ = "user"
 
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    email = Column("email", String, nullable=False, unique=True)
-    password = Column("password", String, nullable=False)
-    token = Column("token", String, unique=True)
-    role = Column("role", String)
-    active = Column("active", Boolean, nullable=False, default=True)
+    __id = Column("id", Integer, primary_key=True, autoincrement=True)
+    __email = Column("email", String, nullable=False, unique=True)
+    __password = Column("password", String, nullable=False)
+    __token = Column("token", String, unique=True)
+    __role = Column("role", String)
+    __active = Column("active", Boolean, nullable=False, default=True)
 
     def __init__(self, email: str, password: str, role: str, **kw: Any):
         super().__init__(**kw)
-        self.email = email
-        self.password = password
-        self.token = TokenUtils.generate_token(email)
-        self.role = role
-        self.active = True
+        self.__email = email
+        self.__password = PasswordUtils.encode_password(password)
+        self.__token = TokenUtils.generate_token(email)
+        self.__role: UserRole = UserRole.missing(role)
+        self.__active = True
 
     @staticmethod
     def from_request_dto(user_request_dto):
@@ -30,53 +33,52 @@ class User(Base):
     @staticmethod
     def from_dict(data: dict) -> "User":
         user = User(data["email"], data["password"], data["role"])
-        user.id = data["id"]
-        user.token = data["token"]
-        user.active = data["active"]
+        user.__id = data["id"]
+        user.__token = data["token"]
+        user.__active = data["active"]
 
         return user
 
     def to_dict(self) -> dict:
         return {
-            "email": self.email,
-            "password": self.password,
-            "token": self.token,
-            "role": self.role,
-            "active": self.active
+            "email": self.__email,
+            "password": self.__password,
+            "token": self.__token,
+            "role": self.__role,
+            "active": self.__active
         }
 
     def get_id(self):
-        return self.id
+        return self.__id
 
     def set_email(self, email: str):
-        self.email = email
+        self.__email = email
 
     def get_email(self):
-        return self.email
-
+        return self.__email
 
     def set_password(self, password: str):
-        self.password = password
+        self.__password = PasswordUtils.encode_password(password)
 
     def get_password(self):
-        return self.password
+        return self.__password
 
 
     def set_token(self, token: str):
-        self.token = token
+        self.__token = token
 
     def get_token(self):
-        return self.token
+        return self.__token
 
 
     def set_role(self, role: str):
-        self.role = role
+        self.__role = role
 
     def get_role(self):
-        return self.role
+        return self.__role
 
     def set_active(self, active: bool):
-        self.active = active
+        self.__active = active
 
     def get_active(self):
-        return self.active
+        return self.__active
