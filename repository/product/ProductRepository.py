@@ -6,14 +6,17 @@ class ProductRepository:
 
     @staticmethod
     def find_by_id(product_id : int):
+
         response = (supabase.table("product").select("*").eq("id", product_id).execute())
         if not response.data:
            return None
+
         return Product.from_dict(response.data[0])
 
     @staticmethod
     def delete_by_id(product_id : int):
         response = (supabase.table("product").delete().eq("id", product_id).execute())
+
         if not response.data:
            return None
         return Product.from_dict(response.data[0])

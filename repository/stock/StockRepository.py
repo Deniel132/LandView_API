@@ -14,6 +14,23 @@ class StockRepository:
         return StockProduct.from_dict(response.data[0])
 
     @staticmethod
+    def find_by_product_id(product_id: int):
+        response = (
+            supabase.table("stock_product")
+            .select("*")
+            .eq("id_product", product_id)
+            .execute()
+        )
+
+
+        if not response.data:
+            return None
+
+        return StockProduct.from_dict(response.data[0])
+
+
+
+    @staticmethod
     def find_all():
         response = (supabase.table("stock_product").select("*").execute())
 
@@ -36,7 +53,6 @@ class StockRepository:
         response = (supabase.table("stock_product").insert(stock_product.to_dict()).execute())
         if not response.data:
             return None
-
         return StockProduct.from_dict(response.data[0])
 
     @staticmethod

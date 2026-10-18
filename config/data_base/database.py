@@ -7,7 +7,7 @@ from supabase import create_client
 load_dotenv()
 
 __url = os.getenv("SUPABASE_URL")
-__key = os.getenv("SUPABASE_KEY")
+__key = os.getenv("SUPABASE_SECRET_KEY")
 __USER = os.getenv("user")
 __PASSWORD = os.getenv("password")
 __HOST = os.getenv("host")
@@ -18,7 +18,7 @@ __DATABASE_URL = f"postgresql+psycopg2://{__USER}:{__PASSWORD}@{__HOST}:{__PORT}
 
 
 if not __url or not __key:
-    raise RuntimeError("Configure SUPABASE_URL e SUPABASE_KEY no .env")
+    raise RuntimeError("Configure SUPABASE_URL e SUPABASE_SECRET_KEY no .env")
 
 supabase = create_client(__url, __key)
 

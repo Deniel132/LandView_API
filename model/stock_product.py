@@ -1,9 +1,8 @@
-from typing import Any
-
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 from config.data_base.database import Base
+from model.product import Product
 
 
 class StockProduct(Base):
@@ -14,23 +13,28 @@ class StockProduct(Base):
     __quantity = Column("quantity", Integer, nullable=False, default=0)
     __product = relationship("Product", back_populates="_Product__stock_item")
 
-    def __init__(self,product,quantity: int,**kw: Any):
+    def __init__(self, id_product: int, quantity: int, id: int = None, **kw):
         super().__init__(**kw)
-        self.__product = product
+        self.__id = id
+        self.__id_product = id_product
         self.__quantity = quantity
 
     @staticmethod
     def from_dict(data: dict) -> "StockProduct":
-        stock_product = StockProduct.__new__(StockProduct)
-        stock_product._StockProduct__id = data.get("id")
-        stock_product._StockProduct__id_product = data.get("id_product")
-        stock_product._StockProduct__quantity = data.get("quantity", 0)
-        return stock_product
-
+        return StockProduct(
+            id_product=data["id_product"],
+            quantity=data["quantity"],
+            id=data.get("id")
+        )
     def to_dict(self) -> dict:
+        product_id = self.__id_product
+
+        if isinstance(product_id, Product):
+            product_id = product_id.get_id()
+
         return {
-            "id_product": self.get_id_product(),
-            "quantity": self.get_quantity()
+            "id_product": product_id,
+            "quantity": self.__quantity
         }
 
     def get_id(self):
