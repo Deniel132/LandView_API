@@ -4,7 +4,7 @@ from app.utils.password_utils import PasswordUtils
 from dto.user.request.UserRequestDTO import UserRequestDTO
 from dto.user.response.UserResponseDTO import UserResponseDTO
 from model.user import User
-from repository.UserRepository import UserRepository
+from repository.user.UserRepository import UserRepository
 from model.enums.user_role import UserRole
 
 
@@ -49,7 +49,7 @@ class UserService:
         user.set_email(user_dto.email)
         user.set_role(user_dto.role.name)
         user.set_password(PasswordUtils.encode_password(user_dto.password))
-        self.repository.update_user(user)
+        self.repository.update_user(user_id,user)
 
         return UserResponseDTO.from_user(user)
 
