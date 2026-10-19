@@ -1,6 +1,8 @@
 from fastapi import HTTPException
 
 from app.utils.password_utils import PasswordUtils
+from app.utils.token_utils import TokenUtils
+from dto.user.request.UserLoginDTO import UserLoginDTO
 from dto.user.request.UserRequestDTO import UserRequestDTO
 from dto.user.response.UserResponseDTO import UserResponseDTO
 from model.user import User
@@ -61,4 +63,18 @@ class UserService:
     def __get_by_id(self, user_id: int) -> User:
         return self.repository.find_by_id(user_id)
 
+    def login(self, user_login_dto: UserLoginDTO) -> UserResponseDTO:
+        user = self.repository.find_by_email(user_login_dto.email)
 
+        if not user:
+            raise ValueError("Email invalido ou senha")
+
+        has_valid_password = PasswordUtils.verify_password(user_login_dto.password, user.password)
+
+        if has_valid_password:
+            new_token = TokenUtils.generate_token(user.email)
+            user.set_token(new_token)
+            return new_token
+
+
+        raise HTTPException(status_code=400, detail="Email invalido ou senha")

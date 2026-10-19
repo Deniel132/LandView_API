@@ -12,6 +12,13 @@ class UserRepository:
         return User.from_dict(response.data[0])
 
     @staticmethod
+    def find_by_email(user_email: str):
+        response = (supabase.table("user").select("*").eq("email", user_email).execute())
+        if not response.data:
+            return None
+        return User.from_dict(response.data[0])
+
+    @staticmethod
     def find_by_token(token : str):
         response = (supabase.table("user").select("*").eq("token", token).execute())
         if not response.data:

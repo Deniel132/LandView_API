@@ -1,15 +1,19 @@
-import numbers
 from fastapi import APIRouter
 
 from app.service.user.UserService import UserService
 from config.routes.user.user_routes import UserRoutes
+from dto.user.request.UserLoginDTO import UserLoginDTO
 from dto.user.request.UserRequestDTO import UserRequestDTO
-from model.user import User
 
 user_router = APIRouter(prefix=UserRoutes.USER_PREFIX, tags=["Usuarios"])
 
 class UserController:
     service = UserService()
+
+    @staticmethod
+    @user_router.post("/login")
+    def __login(request : UserLoginDTO):
+        return UserController.service.login(request)
 
     @staticmethod
     @user_router.get("/{user_id}")
