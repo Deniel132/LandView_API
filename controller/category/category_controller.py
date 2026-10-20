@@ -1,9 +1,11 @@
 from fastapi import APIRouter
+from fastapi.params import Depends
 
+from app.security.security import get_current_user
 from app.service.category.CategoryService import CategoryService
 from dto.category.request.CategoryRequestDTO import CategoryRequestDTO
 
-category_router = APIRouter(prefix="/category", tags=["Category"])
+category_router = APIRouter(dependencies=[Depends(get_current_user)] ,prefix="/category", tags=["Category"])
 
 class CategoryController:
     category_service = CategoryService()

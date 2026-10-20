@@ -1,9 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
+from fastapi.params import Depends
 
+from app.security.security import get_current_user
 from app.service.product.ProductService import ProductService
 from dto.product.request.ProductRequestDTO import ProductRequestDTO
 
-product_router = APIRouter(prefix="/product", tags=["Product"])
+product_router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/product", tags=["Product"])
 
 class ProductController:
     product_service = ProductService()
@@ -18,11 +20,11 @@ class ProductController:
 
     @staticmethod
     @product_router.post("/")
-    def create_product(product_request: ProductRequestDTO):
+    def create_product(product_request: ProductRequestDTO,request:Request):
         """
     Rota para criar um produto
         """
-
+        protect = get_current_user(request)
         return ProductController.product_service.create_product(product_request)
 
     @staticmethod

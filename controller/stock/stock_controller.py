@@ -1,9 +1,11 @@
 from fastapi import APIRouter
+from fastapi.params import Depends
 
+from app.security.security import get_current_user
 from app.service.stock.StockService import StockService
 from dto.stock.request.StockRequestDTO import StockRequestDTO
 
-stock_router = APIRouter(prefix="/stock", tags=["Stock"])
+stock_router = APIRouter(dependencies=[Depends(get_current_user)] ,prefix="/stock", tags=["Stock"])
 
 class StockController:
     stock_service = StockService()

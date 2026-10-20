@@ -70,9 +70,6 @@ class UserService:
         if not user:
             raise ValueError("Email invalido")
 
-        print(user_login_dto.password)
-        print(user.get_password())
-
         has_valid_password = PasswordUtils.verify_password(user.get_password(), user_login_dto.password)
 
         if not has_valid_password :
@@ -81,5 +78,6 @@ class UserService:
 
         new_token = TokenUtils.generate_token(user.get_email())
         user.set_token(new_token)
+        self.repository.update_user(user.get_id(),user)
 
         return new_token
