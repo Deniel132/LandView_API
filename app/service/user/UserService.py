@@ -35,6 +35,7 @@ class UserService:
         if user_dto.role is None:
             user_dto.role = UserRole.USER
 
+        user_dto.password = PasswordUtils.encode_password(user_dto.password)
         user = User.from_request_dto(user_dto)
         user = self.repository.save_user(user)
 
@@ -50,7 +51,7 @@ class UserService:
             raise HTTPException(status_code=404, detail="Usuário não encontrado")
         user.set_email(user_dto.email)
         user.set_role(user_dto.role.name)
-        user.set_password(PasswordUtils.encode_password(user_dto.password))
+        user.set_password(user_dto.password)
         self.repository.update_user(user_id,user)
 
         return UserResponseDTO.from_user(user)
@@ -63,18 +64,22 @@ class UserService:
     def __get_by_id(self, user_id: int) -> User:
         return self.repository.find_by_id(user_id)
 
-    def login(self, user_login_dto: UserLoginDTO) -> UserResponseDTO:
+    def login(self, user_login_dto: UserLoginDTO) -> str:
         user = self.repository.find_by_email(user_login_dto.email)
 
         if not user:
-            raise ValueError("Email invalido ou senha")
+            raise ValueError("Email invalido")
 
-        has_valid_password = PasswordUtils.verify_password(user_login_dto.password, user.password)
+        print(user_login_dto.password)
+        print(user.get_password())
 
-        if has_valid_password:
-            new_token = TokenUtils.generate_token(user.email)
-            user.set_token(new_token)
-            return new_token
+        has_valid_password = PasswordUtils.verify_password(user.get_password(), user_login_dto.password)
 
+        if not has_valid_password :
+            print(has_valid_password)
+            raise ValueError("senha invalida")
 
-        raise HTTPException(status_code=400, detail="Email invalido ou senha")
+        new_token = TokenUtils.generate_token(user.get_email())
+        user.set_token(new_token)
+
+        return new_token

@@ -19,7 +19,7 @@ class User(Base):
     def __init__(self, email: str, password: str, role: str, **kw: Any):
         super().__init__(**kw)
         self.__email = email
-        self.__password = PasswordUtils.encode_password(password)
+        self.__password = password
         self.__token = TokenUtils.generate_token(email)
         self.__role = role
         self.__active = True
