@@ -44,7 +44,7 @@ class User(Base):
             "email": self.__email,
             "password": self.__password,
             "token": self.__token,
-            "role": self.__role,
+            "role": self.__role.name,
             "active": self.__active
         }
 

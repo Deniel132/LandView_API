@@ -8,11 +8,11 @@ load_dotenv()
 
 __url = os.getenv("SUPABASE_URL")
 __key = os.getenv("SUPABASE_SECRET_KEY")
-__USER = os.getenv("user")
-__PASSWORD = os.getenv("password")
-__HOST = os.getenv("host")
-__PORT = os.getenv("port")
-__DBNAME = os.getenv("dbname")
+__USER = os.getenv("USER")
+__PASSWORD = os.getenv("PASSWORD")
+__HOST = os.getenv("HOST")
+__PORT = os.getenv("PORT")
+__DBNAME = os.getenv("DBNAME")
 
 __DATABASE_URL = f"postgresql+psycopg2://{__USER}:{__PASSWORD}@{__HOST}:{__PORT}/{__DBNAME}?sslmode=require"
 

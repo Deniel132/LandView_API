@@ -1,5 +1,7 @@
 from dto.stock.request.StockRequestDTO import StockRequestDTO
 from dto.stock.response.StockResponseDTO import StockResponseDTO
+from infrastructure.erro.exceptions.conflict_exception import ConflictException
+from infrastructure.erro.exceptions.not_found_exception import NotFoundException
 from model.stock_product import StockProduct
 from repository.stock.StockRepository import StockRepository
 from repository.product.ProductRepository import ProductRepository
@@ -21,14 +23,14 @@ class StockService:
         product = self.product_repository.find_by_id(request.product_id)
 
         if product is None:
-            raise ValueError("Produto não encontrado")
+            raise NotFoundException("Produto não encontrado")
 
         existing_stock = self.repository.find_by_product_id(
             request.product_id
         )
 
         if existing_stock is not None:
-            raise ValueError("Este produto já possui um registro de estoque")
+            raise ConflictException("Este produto já possui um registro de estoque")
 
         stock_product = StockProduct(product, request.quantity)
         saved_stock = self.repository.save_stock_product(stock_product)
@@ -41,7 +43,7 @@ class StockService:
     def update(self,stock_product_id: int, request: StockRequestDTO):
         stock = self.repository.find_by_id(stock_product_id)
         if stock is None:
-            raise ValueError("Estoque não encontrado")
+            raise NotFoundException("Estoque não encontrado")
 
         stock.set_quantity(request.quantity)
 
@@ -52,6 +54,6 @@ class StockService:
     def delete(self,stock_product_id: int):
         delete_stock = self.repository.delete_by_id(stock_product_id)
         if delete_stock is None:
-            raise ValueError("Estoque não encontrado")
+            raise NotFoundException("Estoque não encontrado")
 
         return "Estoque Deletado com sucesso"

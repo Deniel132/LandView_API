@@ -1,3 +1,4 @@
+from infrastructure.erro.exceptions.conflict_exception import ConflictException
 from infrastructure.erro.exceptions.bad_request_exception import BadRequestException
 from infrastructure.erro.exceptions.not_found_exception import NotFoundException
 
@@ -31,7 +32,7 @@ class UserService:
             raise BadRequestException("Email ou senha não informado")
 
         if self.exist_by_email(user_dto.email, None):
-            raise BadRequestException("Email informado ja existente")
+            raise ConflictException("Email informado ja existente")
 
         if user_dto.role is None:
             user_dto.role = UserRole.USER
@@ -70,16 +71,15 @@ class UserService:
         user = self.repository.find_by_email(user_login_dto.email)
 
         if not user:
-            raise ValueError("Email invalido")
+            raise BadRequestException("Email ou senha invalidos")
 
         has_valid_password = PasswordUtils.verify_password(user.get_password(), user_login_dto.password)
 
-        if not has_valid_password :
-            print(has_valid_password)
-            raise ValueError("senha invalida")
+        if not has_valid_password:
+            raise BadRequestException("Email ou senha invalidos")
 
         new_token = TokenUtils.generate_token(user.get_email())
         user.set_token(new_token)
-        self.repository.update_user(user.get_id(),user)
+        self.repository.update_user(user.get_id(), user)
 
         return new_token
