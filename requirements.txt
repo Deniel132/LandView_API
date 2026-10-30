@@ -8,6 +8,7 @@ bcrypt
 email-validator
 psycopg2
 cryptography
+starlette
 
 
 #python -m pip install -r requirements.txt

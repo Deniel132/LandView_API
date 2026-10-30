@@ -1,12 +1,13 @@
+from pydantic import BaseModel
+
 from model.stock_product import StockProduct
 
 
-class StockResponseDTO:
-    def __init__(self,stock_id: int, product_id: int, quantity: int):
-        self.stock_id = stock_id
-        self.product_id = product_id
-        self.quantity = quantity
+class StockResponseDTO(BaseModel):
+    stock_id: int
+    product_id: int
+    quantity : int
 
     @staticmethod
     def from_stock(stock: StockProduct):
-        return StockResponseDTO(stock.get_id(),stock.get_product_id(),stock.get_quantity())
+        return StockResponseDTO(stock_id=stock.get_id(),product_id=stock.get_product_id(),quantity=stock.get_quantity())
