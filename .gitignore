@@ -1,6 +1,7 @@
 # Variáveis de ambiente e segredos
 .env
 .env.*
+*.env
 
 .venv/
 venv/

@@ -68,13 +68,18 @@ class UserService:
         user = self.repository.find_by_email(user_login_dto.email)
 
         if not user:
-            raise ValueError("Email invalido")
+            raise HTTPException(
+                status_code=401,
+                detail="E-mail ou senha incorretos.",
+            )
 
         has_valid_password = PasswordUtils.verify_password(user.get_password(), user_login_dto.password)
 
         if not has_valid_password :
-            print(has_valid_password)
-            raise ValueError("senha invalida")
+            raise HTTPException(
+                status_code=401,
+                detail="E-mail ou senha incorretos.",
+            )
 
         new_token = TokenUtils.generate_token(user.get_email())
         user.set_token(new_token)
