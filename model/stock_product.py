@@ -11,22 +11,12 @@ class StockProduct(Base):
     __tablename__ = "stock_product"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-
-    __id_product = Column(
-        "id_product",
-        Integer,
-        ForeignKey("product.id"),
-        nullable=False
-    )
+    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False)
 
     __characteristics = Column("characteristics", String, nullable=True)
     __sub_characteristics = Column("sub_characteristics", String, nullable=True)
     __quantity = Column("quantity", Integer, nullable=False, default=0)
-
-    __product = relationship(
-        "Product",
-        back_populates="_Product__stock_item"
-    )
+    __product = relationship("Product",back_populates="_Product__stock_item")
 
     def __init__(
         self,
