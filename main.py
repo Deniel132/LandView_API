@@ -4,6 +4,7 @@ from fastapi import *
 from controller.category.category_controller import category_router
 from controller.stock.stock_controller import stock_router
 from controller.product.product_controller import product_router
+from controller.stock.stock_exit_controller import stock_exit_router
 from infrastructure.erro.global_heandler import GlobalHandler
 
 app = FastAPI()
@@ -23,6 +24,7 @@ app.include_router(stock_router)
 app.include_router(product_router)
 app.include_router(category_router)
 app.include_router(user_public_router)
+app.include_router(stock_exit_router)
 GlobalHandler(app)
 
 

@@ -9,7 +9,7 @@ class StockProduct(Base):
     __tablename__ = "stock_product"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False,unique=True)
+    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False)
     __quantity = Column("quantity", Integer, nullable=False, default=0)
     __product = relationship("Product", back_populates="_Product__stock_item")
 
@@ -45,13 +45,6 @@ class StockProduct(Base):
 
     def set_product_id(self, product):
         self.__product = product
-
-    def get_product(self):
-        return self.__product
-
-    def set_product(self, product):
-        self.__id_product = product.id
-
 
     def get_quantity(self) -> int:
         return self.__quantity

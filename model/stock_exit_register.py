@@ -8,9 +8,9 @@ class StockExitRegister(Base):
     __tablename__ = "stock_exit_register"
 
     __id = Column("id", Integer, primary_key=True, autoincrement=True)
-    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False,unique=True)
-    __id_user = Column("id_user",Integer,ForeignKey("user.id"),nullable=False,unique=True)
-    __id_stock = Column("id_stock",Integer,ForeignKey("stock_product.id"),nullable=False,unique=True)
+    __id_product = Column("id_product",Integer,ForeignKey("product.id"),nullable=False)
+    __id_user = Column("id_user",Integer,ForeignKey("user.id"),nullable=False)
+    __id_stock = Column("id_stock",Integer,ForeignKey("stock_product.id"),nullable=False)
     __quantity = Column("quantity", Integer, nullable=False, default=0)
 
     def __init__(self, id_product: int, id_user: int, id_stock: int, quantity: int, id: int = None, **kw):
@@ -55,13 +55,13 @@ class StockExitRegister(Base):
     def set_user(self, user):
         self.__id_user = user.id
 
-    def get_user(self):
+    def get_user_id(self):
         return self.__id_user
 
     def set_stock_product(self, stock_product):
         self.__id_stock = stock_product.id
 
-    def get_stock_product(self):
+    def get_stock_product_id(self):
         return self.__id_stock
 
     def get_quantity(self) -> int:
