@@ -14,8 +14,11 @@ from controller.user.user_controller import user_router, user_public_router
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000"],
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"],
+    allow_origins=[
+        "https://landview.onrender.com/"
+    ],
+    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 Base.metadata.create_all(bind=Engine)
