@@ -17,6 +17,9 @@ class StockService:
 
     def find_by_id(self, stock_id: int) -> StockResponseDTO:
         stock = self.__get_by_id(stock_id)
+        if stock is None:
+            raise NotFoundException("Estoque não encontrado")
+
         return StockResponseDTO.from_stock(stock)
 
     def create(self, request: StockRequestDTO):
