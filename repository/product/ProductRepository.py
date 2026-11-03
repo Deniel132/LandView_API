@@ -4,6 +4,9 @@ from model.product import Product
 
 class ProductRepository:
 
+
+
+
     @staticmethod
     def find_by_id(product_id : int):
 

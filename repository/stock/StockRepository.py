@@ -5,6 +5,25 @@ from model.stock_product import StockProduct
 class StockRepository:
 
     @staticmethod
+    def find_product_with_lowest_stock():
+        response = (supabase.table("stock_product").select("*, product(*)").order("quantity", desc=False).limit(1).execute())
+
+        if not response.data:
+            return None
+
+        return StockProduct.from_dict(response.data[0])
+
+    @staticmethod
+    def find_product_with_highest_stock():
+        response = (supabase.table("stock_product").select("*, product(*)") .order("quantity", desc=True).limit(1).execute())
+
+        if not response.data:
+            return None
+
+        return StockProduct.from_dict(response.data[0])
+
+
+    @staticmethod
     def find_by_id(stock_product_id: int):
         response = (supabase.table("stock_product").select("*").eq("id", stock_product_id).execute())
 

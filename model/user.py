@@ -1,5 +1,6 @@
 from typing import Any
 
+from pydantic.v1.schema import schema
 from sqlalchemy import Column, Integer, String, Boolean
 
 from app.utils.password_utils import PasswordUtils
