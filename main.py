@@ -5,6 +5,7 @@ from controller.category.category_controller import category_router
 from controller.dashboard.dashboard_controller import dashboard_router
 from controller.stock.stock_controller import stock_router
 from controller.product.product_controller import product_router
+from controller.stock.stock_exit_controller import stock_exit_router
 from infrastructure.erro.global_heandler import GlobalHandler
 
 app = FastAPI()
@@ -14,8 +15,9 @@ from controller.user.user_controller import user_router, user_public_router
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000"],
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"],
+    allow_origins=["https://landview.onrender.com/"],
+    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 Base.metadata.create_all(bind=Engine)
@@ -25,6 +27,7 @@ app.include_router(product_router)
 app.include_router(category_router)
 app.include_router(dashboard_router)
 app.include_router(user_public_router)
+app.include_router(stock_exit_router)
 GlobalHandler(app)
 
 
