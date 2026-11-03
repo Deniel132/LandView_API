@@ -29,7 +29,7 @@ class User(Base):
 
     @staticmethod
     def from_request_dto(user_request_dto):
-        return User(user_request_dto.email, user_request_dto.password, user_request_dto.role.name)
+        return User(user_request_dto.email, user_request_dto.password, user_request_dto.role)
 
     @staticmethod
     def from_dict(data: dict) -> "User":
@@ -71,9 +71,8 @@ class User(Base):
     def get_token(self):
         return self.__token
 
-
-    def set_role(self, role: str):
-        self.__role = role
+    def set_string_role(self, role: str):
+        self.__role = UserRole.missing(role)
 
     def get_role(self):
         return self.__role

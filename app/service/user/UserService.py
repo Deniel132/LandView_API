@@ -34,8 +34,8 @@ class UserService:
         if self.exist_by_email(user_dto.email, None):
             raise ConflictException("Email informado ja existente")
 
-        if user_dto.role is None:
-            user_dto.role = UserRole.USER
+        if not user_dto.role:
+            user_dto.role = UserRole.USER.name
 
         user_dto.password = PasswordUtils.encode_password(user_dto.password)
         user = User.from_request_dto(user_dto)
@@ -53,7 +53,7 @@ class UserService:
             raise BadRequestException("Usuário não encontrado")
 
         user.set_email(user_dto.email)
-        user.set_role(user_dto.role.name)
+        user.set_string_role(user_dto.role)
         user.set_password(user_dto.password)
         self.repository.update_user(user_id,user)
 
