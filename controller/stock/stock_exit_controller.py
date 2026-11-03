@@ -3,8 +3,8 @@ from fastapi.params import Depends
 
 from app.security.security import get_current_user
 from app.service.stock.StockService import StockService
-from app.service.stock.StoqueExitService import StockExitService
-from dto.stock.request.StoqueExitRequestDTO import StockExitRequestDTO
+from app.service.stock.StockExitService import StockExitService
+from dto.stock.request.StockExitRequestDTO import StockExitRequestDTO
 from dto.stock.response.StockResponseDTO import StockResponseDTO
 from infrastructure.erro.error_response import ErrorResponse
 from dto.stock.response.StockExitRegisterResponseDTO import StockExitRegisterResponseDTO

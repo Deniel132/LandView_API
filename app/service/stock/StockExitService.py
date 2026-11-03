@@ -1,4 +1,4 @@
-from dto.stock.request.StoqueExitRequestDTO import StockExitRequestDTO
+from dto.stock.request.StockExitRequestDTO import StockExitRequestDTO
 from dto.stock.response.StockExitRegisterResponseDTO import StockExitRegisterResponseDTO
 from dto.stock.response.StockResponseDTO import StockResponseDTO
 from model.user import User
