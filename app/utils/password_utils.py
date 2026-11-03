@@ -6,11 +6,10 @@ from dotenv import load_dotenv
 class PasswordUtils:
     load_dotenv()
     _PREFIX = "enc:v1:"
-    _DEFAULT_KEY = "yEAMz6EQ0uo6YD7AM8dCZiGRkqfd9iFO1wqaObFj1VQ="
 
     @staticmethod
     def _get_key_bytes() -> bytes:
-        key = os.getenv("ENCRYPT_KEY") or PasswordUtils._DEFAULT_KEY
+        key = os.getenv("ENCRYPT_KEY")
         return key.encode("utf-8")
 
     @staticmethod
