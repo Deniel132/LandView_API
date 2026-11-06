@@ -35,7 +35,7 @@ class DashboardController(APIRouter):
     @dashboard_router.get(
         "/best-selling",
         summary="Ver os 10 produtos mais vendidos",
-        description="Retorna os 10 produtos com maior quantidade de vendas.",
+        description="Retorna os produtos com maior quantidade de vendas.",
         responses={
             200: {"description": "Produtos encontrados"},
             401: {"model": ErrorResponse},
