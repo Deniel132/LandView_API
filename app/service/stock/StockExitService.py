@@ -25,7 +25,7 @@ class StockExitService:
         if stock.get_quantity() < exit_request.quantity:
             raise BadRequestException("Quantidade para saida informada superior ao registrado no estoque")
 
-        stock.set_quantity(exit_request.quantity)
+        stock.set_quantity(stock.get_quantity() - exit_request.quantity)
         exit_register: StockExitRegister = StockExitRegister(stock.get_product_id(), current_user.get_id(), exit_request.stock_id, stock.get_quantity())
         self.exit_register_repository.save_register(exit_register)
         stock = self.repository.update_stock_product(stock.get_id(), stock)
