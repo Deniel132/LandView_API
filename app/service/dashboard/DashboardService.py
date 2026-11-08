@@ -1,6 +1,6 @@
+from dto.dashboard.ProductDashboardDTO import ProductDashboardDTO
 from dto.dashboard.DashboardResponseDTO import DashboardResponseDTO
 from dto.dashboard.StockDashboardDTO import StockDashboardDTO
-from model.product import Product
 from repository.product.ProductRepository import ProductRepository
 from repository.stock.StockRepository import StockRepository
 
@@ -11,11 +11,8 @@ class DashboardService:
         self.stock_repository = StockRepository()
 
     def get_stock_dashboard(self):
-
             lowest = self.stock_repository.find_product_with_lowest_stock()
             highest = self.stock_repository.find_product_with_highest_stock()
-
-
 
             lowest_dto = None
             highest_dto = None
@@ -32,3 +29,11 @@ class DashboardService:
 
             return DashboardResponseDTO(lowest_stock=lowest_dto, highest_stock=highest_dto
             )
+
+    def get_best_selling_products(self):
+        products = self.product_repository.get_best_selling_products()
+
+        return [
+            ProductDashboardDTO(**product)
+            for product in products
+        ]

@@ -30,3 +30,18 @@ class DashboardController(APIRouter):
     Rota para buscar produtos com maior e menor estoque
         """
         return DashboardController.dashboard_service.get_stock_dashboard()
+
+    @staticmethod
+    @dashboard_router.get(
+        "/best-selling",
+        summary="Ver os 10 produtos mais vendidos",
+        description="Retorna os produtos com maior quantidade de vendas.",
+        responses={
+            200: {"description": "Produtos encontrados"},
+            401: {"model": ErrorResponse},
+            500: {"model": ErrorResponse},
+        }
+    )
+    def get_best_selling_products():
+        """ Retorna os produtos com maior quantidade de vendas"""
+        return DashboardController.dashboard_service.get_best_selling_products()
