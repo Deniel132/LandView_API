@@ -40,6 +40,69 @@ class ProductRepository:
         return result
 
     @staticmethod
+    def get_all() -> list[Product]:
+        response = (supabase.table("product").select("*").execute())
+
+        if not response.data:
+            return []
+
+        mapped_response = []
+        for resp in response.data:
+            mapped_response.append(Product.from_dict(resp))
+
+        return mapped_response
+
+    @staticmethod
+    def get_filtered_products(
+            page:int,
+            page_size: int,
+            id_product:int | None = None,
+            id_stock:int | None = None,
+            unit_value: float | None = None,
+            id_category:int | None = None,
+            active:bool | None = None,
+            name:str | None = None
+    ) -> list[Product]:
+        start = (page - 1) * page_size
+        end = start + page_size - 1
+        query = None
+        if id_stock and id_stock is not None:
+            query = supabase.table("product").select("*, stock_product!inner(*)").eq("stock_product.id", id_stock)
+        else:
+            query = supabase.table("product").select("*")
+
+        if id_product and id_product is not None:
+            query = query.eq("id", id_product)
+
+        if unit_value and unit_value is not None:
+            query = query.eq("unit_value", unit_value)
+
+        if id_category and id_category is not None:
+            query = query.eq("product_category_id", id_category)
+
+        if name and name is not None:
+            query = query.ilike("product_name", name)
+
+        if active  is not None:
+            query = query.eq("active", active)
+
+        response = (
+            query
+            .order("id", desc=True)
+            .range(start, end)
+            .execute()
+        )
+
+        if not response.data:
+            return []
+
+        product_list = []
+        for resp in response.data:
+            product_list.append(Product.from_dict(resp))
+
+        return product_list
+
+    @staticmethod
     def find_by_id(product_id : int):
 
         response = (supabase.table("product").select("*").eq("id", product_id).execute())

@@ -11,6 +11,33 @@ class ProductService:
         self.repository = ProductRepository()
         self.category_repository = CategoryRepository()
 
+    def get_all_products(self):
+        response = self.repository.get_all()
+
+        if not response:
+            return []
+
+        product_list = []
+        for resp in response:
+            product_list.append(ProductResponseDTO.from_product(resp))
+
+        return product_list
+
+    def get_filtered_products(self, page:int = 1, page_size: int = 10, id_product:int | None = None, id_stock:int | None = None, unit_value: float | None = None,  id_category:int | None = None,  active:bool | None = None,  name:str | None = None):
+        if page < 1 or page_size < 1:
+            raise BadRequestException("Pagina ou tamanho de pagina incorreto")
+
+        response = self.repository.get_filtered_products(page, page_size, id_product, id_stock, unit_value, id_category, active, name)
+
+        if not response:
+            return []
+
+        product_list = []
+        for resp in response:
+            product_list.append(ProductResponseDTO.from_product(resp))
+
+        return product_list
+
     def __get_by_id(self, product_id):
         return self.repository.find_by_id(product_id)
 
@@ -33,7 +60,7 @@ class ProductService:
         return ProductResponseDTO.from_product(saved_product)
 
     def update_product(self, product_id: int,request:ProductRequestDTO):
-        product = self.find_by_id(product_id)
+        product = self.__get_by_id(product_id)
 
         if product is None:
             raise NotFoundException("Produto não encontrado")

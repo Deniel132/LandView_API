@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Path
 from fastapi.params import Depends
 
 from app.security.security import get_current_user
@@ -14,6 +14,46 @@ class ProductController:
 
     @staticmethod
     @product_router.get(
+        "/all",
+        summary="Buscar todos os Produto",
+        description="Retorna os dados de todos os Produto.",
+        tags=["Product"],
+        response_model=list[ProductResponseDTO],
+        responses={
+            200: {"model": list[ProductResponseDTO], "description": "Produtos encontrados"},
+            401: {"model": ErrorResponse, "description": "Não autorizado"},
+            404: {"model": ErrorResponse, "description": "Produtos não encontrados"},
+            500: {"model": ErrorResponse, "description": "Erro interno"},
+        },
+    )
+    def get_all_product():
+        """
+    Rota para busca de todos os Produtos
+        """
+        return ProductController.product_service.get_all_products()
+
+    @staticmethod
+    @product_router.get(
+        "/",
+        summary="Buscar Produtos por filtros",
+        description="Retorna os dados de uma lista de Produto por seus filtros.",
+        tags=["Product"],
+        response_model=list[ProductResponseDTO],
+        responses={
+            200: {"model": ProductResponseDTO, "description": "Produto encontrado"},
+            401: {"model": ErrorResponse, "description": "Não autorizado"},
+            404: {"model": ErrorResponse, "description": "Produto não encontrado"},
+            500: {"model": ErrorResponse, "description": "Erro interno"},
+        },
+    )
+    def get_filtered_products( page:int, page_size: int, id_product:int | None = None, id_stock:int | None = None, unit_value: float | None = None,  id_category:int | None = None,  active:bool | None = None,  name:str | None = None):
+        """
+    Rota para busca de Produtos por filtros
+        """
+        return ProductController.product_service.get_filtered_products(page, page_size, id_product, id_stock, unit_value, id_category, active, name)
+
+    @staticmethod
+    @product_router.get(
         "/{product_id}",
         summary="Buscar Produto por ID",
         description="Retorna os dados de um Produto pelo seu identificador.",
@@ -26,7 +66,7 @@ class ProductController:
             500: {"model": ErrorResponse, "description": "Erro interno"},
         },
     )
-    def get_product(product_id: int):
+    def get_product(product_id: int = Path(..., gt=0)):
         """
     Rota para busca o Produto pelo ID
         """
