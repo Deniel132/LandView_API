@@ -2,7 +2,6 @@ from typing import Any
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float
 from sqlalchemy.orm import relationship
-
 from config.data_base.database import Base
 
 
@@ -15,7 +14,9 @@ class Product(Base):
     __product_category_id = Column("product_category_id",Integer,ForeignKey("product_category.id"),nullable=False)
     __category = relationship("ProductCategory",back_populates="_ProductCategory__products")
     __stock_item = relationship("StockProduct",back_populates="_StockProduct__product")
+    __images = relationship("Image", back_populates="_Image__product",cascade="all, delete-orphan")
     __active = Column("active", Boolean, nullable=False, default=True)
+
 
     def __init__(self,product_name: str,value: float,category,**kw: Any):
         super().__init__(**kw)
@@ -82,3 +83,9 @@ class Product(Base):
 
     def set_active(self, active: bool):
         self.__active = active
+
+    def get_images(self):
+        return self.__images
+
+    def set_images(self, images):
+        self.__images = images

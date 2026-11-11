@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Request, Path
+from fastapi import APIRouter, Path
 from fastapi.params import Depends
 
 from app.security.security import get_current_user
 from app.service.product.ProductService import ProductService
+from dto.product.request.CreateProductRequestDTO import CreateProductRequestDTO
 from dto.product.request.ProductRequestDTO import ProductRequestDTO
 from dto.product.response.ProductResponseDTO import ProductResponseDTO
 from infrastructure.erro.error_response import ErrorResponse
@@ -87,7 +88,7 @@ class ProductController:
             500: {"model": ErrorResponse, "description": "Erro interno"},
         },
     )
-    def create_product(product_request: ProductRequestDTO):
+    def create_product(product_request: CreateProductRequestDTO):
         """
     Rota para criar um produto
         """

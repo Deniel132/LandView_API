@@ -1,5 +1,3 @@
-from psycopg.types import none
-
 from config.data_base.database import supabase
 from model.product import Product
 
