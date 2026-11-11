@@ -62,24 +62,6 @@ class ImageController:
 
     @staticmethod
     @image_router.get(
-        "/product/{product_id}",
-        summary="Buscar imagens de um produto",
-        description="Retorna todas as imagens vinculadas a um produto.",
-        responses={
-            200: {"description": "Imagens encontradas"},
-            401: {"model": ErrorResponse, "description": "Não autorizado"},
-            500: {"model": ErrorResponse, "description": "Erro interno"},
-        },
-    )
-    def get_images(
-            product_id: int = Path(..., gt=0)
-    ):
-        return ImageController.image_service.get_all_images_by_product(
-            product_id
-        )
-
-    @staticmethod
-    @image_router.get(
         "/product/{product_id}/all",
         summary="Buscar todas as imagens de um produto",
         description="Retorna todas as imagens vinculadas ao produto.",
