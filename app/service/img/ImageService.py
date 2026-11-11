@@ -18,6 +18,11 @@ class ImageService:
         saved_files = []
 
         for file_base64 in files_base64:
+            if file_base64.startswith("data:"):
+                try:
+                    _, file_base64 = file_base64.split(",", 1)
+                except ValueError:
+                    raise ValueError("Data URL inválida")
 
             try:
                 file_bytes = base64.b64decode(file_base64, validate=True)
