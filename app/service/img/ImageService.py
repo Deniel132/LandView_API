@@ -3,6 +3,7 @@ import base64
 import binascii
 from uuid import uuid4
 
+from infrastructure.erro.exceptions.bad_request_exception import BadRequestException
 from infrastructure.erro.exceptions.not_found_exception import NotFoundException
 from repository.img.ImageRepository import ImageRepository
 
@@ -21,13 +22,13 @@ class ImageService:
             if file_base64.startswith("data:"):
                 try:
                     _, file_base64 = file_base64.split(",", 1)
-                except ValueError:
-                    raise ValueError("Data URL inválida")
+                except BadRequestException:
+                    raise BadRequestException("Data URL inválida")
 
             try:
                 file_bytes = base64.b64decode(file_base64, validate=True)
             except (binascii.Error, ValueError):
-                raise ValueError("Arquivo Base64 inválido")
+                raise BadRequestException("Arquivo Base64 inválido")
 
 
             file_id = str(uuid4())

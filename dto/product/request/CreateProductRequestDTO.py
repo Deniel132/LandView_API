@@ -1,5 +1,4 @@
-from pydantic import BaseModel, Field
-from sqlalchemy import null
+from pydantic import BaseModel
 
 from dto.stock.request.CreateStockRequestDTO import CreateStockRequestDTO
 
