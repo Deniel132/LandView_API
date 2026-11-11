@@ -1,3 +1,5 @@
+from app.service.img.ImageService import ImageService
+from dto.product.request.CreateProductRequestDTO import CreateProductRequestDTO
 from dto.product.request.ProductRequestDTO import ProductRequestDTO
 from dto.product.response.ProductResponseDTO import ProductResponseDTO
 from model.product import Product
@@ -10,6 +12,7 @@ class ProductService:
     def __init__(self):
         self.repository = ProductRepository()
         self.category_repository = CategoryRepository()
+        self.image_service = ImageService()
 
     def get_all_products(self):
         response = self.repository.get_all()
@@ -49,13 +52,27 @@ class ProductService:
 
         return ProductResponseDTO.from_product(product)
 
-    def create_product(self, request:ProductRequestDTO):
-        category = self.category_repository.find_by_id(request.product_category_id)
+    def create_product(self, request: CreateProductRequestDTO):
+        category = self.category_repository.find_by_id(request.category_id)
+
         if category is None:
             raise NotFoundException("Categoria não encontrada")
 
+
+
         product = Product(request.product_name, request.unit_value, category)
+        if request.images:
+            self.image_service.create_files(
+                product.get_id(),
+                request.images
+            )
         saved_product = self.repository.save_product(product)
+
+        if request.images:
+            self.image_service.create_files(
+                saved_product.get_id(),
+                request.images
+            )
 
         return ProductResponseDTO.from_product(saved_product)
 

@@ -9,6 +9,7 @@ email-validator
 psycopg2
 cryptography
 starlette
-
+Pillow==12.3.0
+pillow-heif
 
 #python -m pip install -r requirements.txt
