@@ -14,8 +14,6 @@ class ImageService:
 
     def create_files(self, product_id: int, files_base64: list[str]):
 
-        if not files_base64:
-            raise ValueError("Nenhum arquivo foi enviado")
 
         saved_files = []
 
@@ -26,8 +24,6 @@ class ImageService:
             except (binascii.Error, ValueError):
                 raise ValueError("Arquivo Base64 inválido")
 
-            if not file_bytes:
-                raise ValueError("O arquivo está vazio")
 
             file_id = str(uuid4())
             file_path = f"products/{product_id}/{file_id}"

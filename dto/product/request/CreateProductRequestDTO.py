@@ -1,4 +1,6 @@
 from pydantic import BaseModel, Field
+from sqlalchemy import null
+
 from dto.stock.request.CreateStockRequestDTO import CreateStockRequestDTO
 
 
@@ -7,4 +9,4 @@ class CreateProductRequestDTO(BaseModel):
     product_name: str
     unit_value: float
     stock_item_dto: list[CreateStockRequestDTO]
-    images: list[str] = Field(default_factory=list)
+    images: list[str] | None = None

@@ -58,7 +58,14 @@ class ProductService:
         if category is None:
             raise NotFoundException("Categoria não encontrada")
 
+
+
         product = Product(request.product_name, request.unit_value, category)
+        if request.images:
+            self.image_service.create_files(
+                product.get_id(),
+                request.images
+            )
         saved_product = self.repository.save_product(product)
 
         if request.images:
